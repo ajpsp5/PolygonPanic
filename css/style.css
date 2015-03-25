@@ -1,0 +1,15 @@
+body {
+    margin: 0px;
+    background-color: #1A1A7B;
+    padding: 0px;
+    overflow: hidden;
+}
+
+#phaser-container {
+    position: absolute;
+    left: 50%;
+    margin-left: -640px;
+    background-color: #4545AA;
+    border-left: 1px solid #CCCCCC;
+    border-right: 1px solid #CCCCCC;
+}
