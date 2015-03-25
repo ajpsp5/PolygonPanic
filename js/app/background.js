@@ -100,27 +100,34 @@ function(config, Phaser, music){
     }
 
     Background.prototype.createGrids = function() {
-        // Strange Phaser behavior requires the use of two grids here
 
+        // Strange Phaser behavior requires the use of two grids here
         this.gridGraphics1 = this.game.add.graphics(0, -config.game.height);
         this.gridGraphics2 = this.game.add.graphics(0, 0);
 
-        this.gridGraphics1.beginFill(0x000000, 0.1);
+        this.gridGraphics1.beginFill(0x000000, 0);
         this.gridGraphics1.lineStyle(1, 0x111111, 0.7);
-        this.gridGraphics2.beginFill(0x000000, 0.1);
+        this.gridGraphics2.beginFill(0x000000, 0);
         this.gridGraphics2.lineStyle(1, 0x111111, 0.7);
 
-        this.cellSize = config.grid.cellSize;
-        this.verticalCells = Math.ceil(config.game.width / this.cellSize);
-        this.horizontalCells = Math.ceil(config.game.height / this.cellSize);
-        this.gridGraphics2.y = -config.game.height+this.horizontalCells*this.cellSize;
+        this.cellSize = config.game.height/config.grid.cellCount;
+        this.verticalCells = config.game.width / this.cellSize;
+        this.horizontalCells = config.game.height / this.cellSize;
 
         for (var j=0; j < this.horizontalCells; ++j) {
             for (var i=0; i < this.verticalCells; ++i) {
+                if (j % 2 == 0) {
+                    this.gridGraphics1.beginFill(0x000000, 0.2);
+                    this.gridGraphics2.beginFill(0x000000, 0.2);
+                }
                 this.gridGraphics1.drawRect(i*this.cellSize, j*this.cellSize,
                                             this.cellSize, this.cellSize);
                 this.gridGraphics2.drawRect(i*this.cellSize, j*this.cellSize,
                                             this.cellSize, this.cellSize);
+                if (j % 2 == 0) {
+                    this.gridGraphics1.beginFill(0x000000, 0);
+                    this.gridGraphics2.beginFill(0x000000, 0);
+                }
             }
         }
         this.gridGraphics1.endFill();
@@ -134,10 +141,9 @@ function(config, Phaser, music){
         this.filter.update();
         this.gridGraphics1.y += config.grid.speed;
         this.gridGraphics2.y += config.grid.speed;
-        if (this.gridGraphics1.y > 0) {
+        if (this.gridGraphics1.y >= 0) {
             this.gridGraphics1.y = -config.game.height;
-            this.gridGraphics2.y = -config.game.height+
-                this.horizontalCells*this.cellSize;
+            this.gridGraphics2.y = 0;
         }
         this.blocks = this.blocks.map(function(block){
             if (block.graphics.y > config.game.height) {

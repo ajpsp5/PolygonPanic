@@ -33,7 +33,7 @@ define(function(){
             height : window.innerHeight,
         },
         grid : {
-            cellSize : 20,
+            cellCount : 10,
             speed : 4
         },
         color : {

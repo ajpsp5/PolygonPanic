@@ -12,7 +12,7 @@ define(function(){
      * @param {Phaser.Game} game - The current game object
      */
     var preload = function(game){
-        game.load.script('CheckerWave', 'https://cdn.rawgit.com/photonstorm/phaser/master/filters/CheckerWave.js');
+        game.load.script('CheckerWave', 'js/lib/CheckerWave.js');
     };
 
     return preload;
