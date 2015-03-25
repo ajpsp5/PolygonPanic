@@ -151,7 +151,7 @@ function(config, Phaser, music){
             } else {
                 block.update();
                 return block;
- }
+            }
         }).filter(function(block){
             return block != null;
         });

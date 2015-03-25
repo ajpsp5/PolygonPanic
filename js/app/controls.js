@@ -1,5 +1,5 @@
-define(["app/config", "Phaser"],
-function(config, Phaser){
+define(["app/config", "Phaser", "app/player"],
+function(config, Phaser, player){
     "use strict"
 
     /**
@@ -9,9 +9,7 @@ function(config, Phaser){
     var controls = {
         rotating : false,
         shifting : false,
-        postMove : function() {
-            generator.showLimits();
-        },
+        postMove : function() {},
         keys : [],
 
         /**
@@ -31,14 +29,12 @@ function(config, Phaser){
                 delay: delayBetween,
                 active: false,
                 press : function() {
-                    if (!keyObj.active && $('#pause-menu').data("available")) {
-                        keyObj.callback();
-                        keyObj.active = true;
-                        setTimeout(function(){
-                            keyObj.active = false;
-                        }, keyObj.delay);
-                        controls.postMove();
-                    }
+                    keyObj.callback();
+                    keyObj.active = true;
+                    setTimeout(function(){
+                        keyObj.active = false;
+                    }, keyObj.delay);
+                    controls.postMove();
                 }
             };
             controls.keys.push(keyObj);
@@ -54,6 +50,26 @@ function(config, Phaser){
             }
         }
     };
+
+    controls.registerControl(Phaser.Keyboard.LEFT, function(){
+        if (player.position.x > player.speed)
+            player.position.x -= player.speed;
+    }, this);
+
+    controls.registerControl(Phaser.Keyboard.RIGHT, function(){
+        if (player.position.x < config.game.width)
+            player.position.x += player.speed;
+    }, this);
+
+    controls.registerControl(Phaser.Keyboard.UP, function(){
+        if (player.position.y > player.speed)
+            player.position.y -= player.speed;
+    }, this);
+
+    controls.registerControl(Phaser.Keyboard.DOWN, function(){
+        if (player.position.y < config.game.height)
+            player.position.y += player.speed;
+    }, this);
 
     // Prevent the browser from taking the normal action (scrolling, etc)
     window.addEventListener("keydown", function(e) {

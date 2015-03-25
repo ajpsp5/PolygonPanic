@@ -36,6 +36,9 @@ define(function(){
             cellCount : 10,
             speed : 4
         },
+        player : {
+            defaultSpeed : 4
+        },
         color : {
             background : [
                 0x0193CD,

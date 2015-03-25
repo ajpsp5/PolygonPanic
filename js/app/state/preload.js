@@ -13,6 +13,7 @@ define(function(){
      */
     var preload = function(game){
         game.load.script('CheckerWave', 'js/lib/CheckerWave.js');
+        game.load.image('player-ship', 'assets/images/playership.png');
     };
 
     return preload;

@@ -3,8 +3,8 @@
  * phase of Phaser js startup
  * @module app/state/create
  */
-define(["app/background", "app/music"],
-function(background, music){
+define(["app/config", "app/background", "app/music", "app/player"],
+function(config, background, music, player){
     "use strict"
 
     /**
@@ -16,6 +16,7 @@ function(background, music){
     var create = function(game){
         music.start(game);
         background.start(game);
+        player.init(game, config.game.width/2, config.game.height-40);
 
         game.load.audio('title', 'assets/sounds/title.mp3').onFileComplete.add(
             function(percent, name) {
