@@ -14,17 +14,18 @@ function(config, background, music, player, enemies){
      * @param {Phaser.Game} game - The current game object
      */
     var create = function(game){
+        // Enable physics for collison
+        game.physics.startSystem(Phaser.Physics.ARCADE);
+
         music.start(game);
         background.start(game);
         player.init(game, config.game.width/2, config.game.height-40);
 
         // Create some temporary enemies
         //TODO remove this
-        for (var i=0; i < 3; ++i) {
-            for (var j=0; j < 3; ++j) {
-                new enemies.line1(game, i*80-100, j*80-100);
-            }
-        }
+        setInterval(function(){
+            new enemies.line1(game, Math.random()*-100, Math.random()*-100);
+        }, 1000);
 
         game.load.audio('title', 'assets/sounds/title.mp3').onFileComplete.add(
             function(percent, name) {

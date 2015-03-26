@@ -38,7 +38,7 @@ function(config, Unit){
                         x : "+100",
                         angle : "+180"
                     },
-                    duration : 500
+                    duration : 2000
                 },
                 {
                     options : {
@@ -52,7 +52,7 @@ function(config, Unit){
                 {
                     angle : 0,
                     texture : bullet,
-                    speed : 2
+                    speed : 5
                 }
             ],
             attackRate : 1500,
