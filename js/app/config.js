@@ -37,7 +37,8 @@ define(function(){
             speed : 4
         },
         player : {
-            defaultSpeed : 4
+            defaultSpeed : 4,
+            defaultAttackRate : 150
         },
         color : {
             background : [

@@ -11,16 +11,24 @@ function(config, utils, music, player){
 
         this.game = game;
         this.config = unitConfig;
-        this.graphics = this.game.add.sprite(x, y, this.config.texture);
+        this.graphics = this.game.add.sprite(x, y, this.config.unitTexture);
+        this.game.physics.enable(this.graphics, Phaser.Physics.ARCADE);
         this.graphics.scale.set(0.5, 0.5);
         this.graphics.anchor.set(0.5, 0.5);
-        this.graphics.alpha = config.alpha || 1;
+        this.graphics.alpha = this.config.alpha || 1;
         this.speed = config.defaultSpeed;
 
         this.group = game.add.group();
         this.group.enableBody = true;
         this.group.physicsBodyType = Phaser.Physics.ARCADE;
-        this.bullets = [];
+
+        for (var i=0; i < 60; ++i) {
+            var bullet = this.group.create(-100, -100, this.config.attackTexture);
+            bullet.checkWorldBounds = true;
+            bullet.exists = false;
+            bullet.visible = false;
+            bullet.events.onOutOfBounds.add(this.killBullet, this);
+        }
 
         // Pulse on beat
         music.onBeat.push(this.pulse.bind(this));
@@ -39,10 +47,15 @@ function(config, utils, music, player){
         this.graphics.update = function(){
             this.game.physics.arcade.overlap(player.sprite,
                                          this.group,
-                                         this.collisionHandler.bind(this),
+                                         this.onUnitHitPlayer.bind(this),
                                          null, this);
+
+            this.game.physics.arcade.overlap(player.group,
+                                             this.graphics,
+                                             this.onPlayerHitUnit.bind(this),
+                                             null, this);
             if (this.position.y > config.game.height){
-                this.destroy();
+                this.destroy(true);
             }
         }.bind(this);
     }
@@ -70,38 +83,45 @@ function(config, utils, music, player){
         tween.start();
     }
 
-    Unit.prototype.destroy = function() {
-        this.bullets.forEach(function(bullet){
-            bullet.destroy();
-        });
-        var index = music.onBeat.indexOf(this.pulse.bind(this));
-        console.log("Destroy, index of pulse:", index);
+    Unit.prototype.destroy = function(offscreen) {
+        var offscreen = offscreen || false;
+        if (offscreen) {
+            this.group.destroy();
+        }
         this.graphics.destroy();
     }
 
-    Unit.prototype.collisionHandler = function(playerSprite, bullet) {
-        bullet.destroy();
+    Unit.prototype.onUnitHitPlayer = function(playerSprite, bullet) {
+        bullet.kill();
+    }
+
+    Unit.prototype.onPlayerHitUnit = function(unitSprite, bullet) {
+        bullet.kill();
+        this.destroy();
+    }
+
+    Unit.prototype.killBullet = function(bullet) {
+        bullet.kill();
     }
 
     Unit.prototype.attack = function() {
         if (!this.graphics.exists) {
             this.bulletTimer.stop();
             return;
+        } else if (!this.graphics.inCamera) {
+            return;
         }
 
         var pattern = this.config.attackPattern;
         this.attackIndex = (this.attackIndex+1) % pattern.length;
-
         var config = this.config.attackPattern[this.attackIndex];
-        var bullet = this.group.create(this.position.x, this.position.y, config.texture);
-
         var speed = config.speed;
-        bullet.update = function() {
-            var rads = config.angle*Math.PI/180 + 0.5*Math.PI;
-            this.body.velocity.x = Math.cos(rads)*speed*100;
-            this.body.velocity.y = Math.sin(rads)*speed*100;
-        }
-        this.bullets.push(bullet);
+        var bullet = this.group.getFirstExists(false);
+
+        bullet.reset(this.position.x, this.position.y);
+        var rads = config.angle*Math.PI/180 + 0.5*Math.PI;
+        bullet.body.velocity.x = Math.cos(rads)*speed*100;
+        bullet.body.velocity.y = Math.sin(rads)*speed*100;
     }
 
     Object.defineProperty(Unit.prototype, "position", {

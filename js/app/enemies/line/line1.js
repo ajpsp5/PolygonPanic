@@ -6,7 +6,7 @@ define(["app/config", "app/unit"],
 function(config, Unit){
     "use strict"
 
-    var Line1 = function(game, x, y) {
+    var Line1 = function(game, x, y, left) {
         var width = 30;
         var height = 100;
         var bmd = game.add.bitmapData(width, height);
@@ -35,7 +35,7 @@ function(config, Unit){
             movement : [
                 {
                     options : {
-                        x : "+100",
+                        x : (left) ? "-100" : "+100",
                         angle : "+180"
                     },
                     duration : 2000
@@ -43,7 +43,7 @@ function(config, Unit){
                 {
                     options : {
                         y : "+50",
-                        x : "+70"
+                        x : (left) ? "-70" : "+70",
                     },
                     duration : 1000
                 }
@@ -51,12 +51,12 @@ function(config, Unit){
             attackPattern : [
                 {
                     angle : 0,
-                    texture : bullet,
                     speed : 5
                 }
             ],
-            attackRate : 1500,
-            texture : bmd,
+            attackRate : 500,
+            unitTexture : bmd,
+            attackTexture : bullet,
             alpha : 0.7
         });
     };
