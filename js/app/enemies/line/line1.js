@@ -10,13 +10,6 @@ function(config, Unit){
         var width = 30;
         var height = 100;
         var bmd = game.add.bitmapData(width, height);
-
-        var grd=bmd.context.createRadialGradient(width/2, height/2,
-                                                 5,
-                                                 width/2, height/2,
-                                                 40);
-        grd.addColorStop(0, "blue");
-        grd.addColorStop(1, "white");
         bmd.context.fillStyle = "#000000";
         bmd.context.fillRect(0, 0, width, height);
         bmd.context.fillStyle = "#F3AA49";
@@ -54,6 +47,7 @@ function(config, Unit){
                     speed : 5
                 }
             ],
+            health : 10,
             attackRate : 500,
             unitTexture : bmd,
             attackTexture : bullet,

@@ -38,8 +38,10 @@ define(["app/config"], function(config){
             bullet.exists = false;
             bullet.visible = false;
             bullet.events.onOutOfBounds.add(this.killBullet, this);
+
+            // base bullet damage
+            bullet.attack = 5;
         }
-        console.log(this.group);
     }
 
     Player.prototype.killBullet = function(bullet) {
@@ -48,11 +50,6 @@ define(["app/config"], function(config){
 
     Player.prototype.attack = function() {
         var bullet = this.group.getFirstExists(false);
-
-        if (!bullet) {
-            console.log(this.group);
-        }
-
         bullet.reset(this.position.x, this.position.y);
         bullet.body.velocity.y = -500;
     }

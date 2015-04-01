@@ -13,10 +13,23 @@ function(config, utils, music, player){
         this.config = unitConfig;
         this.graphics = this.game.add.sprite(x, y, this.config.unitTexture);
         this.game.physics.enable(this.graphics, Phaser.Physics.ARCADE);
+        this.graphics.checkWorldBounds = true;
+        this.graphics.events.onEnterBounds.add(function(){
+            this.graphics.events.onOutOfBounds.add(function(){
+                // When a unit goes out of view, destroy it after
+                // enough time has passed for all of its bullets
+                // to be out of view as well
+                setTimeout(function(){
+                    this.destroy(true);
+                }.bind(this), 5000);
+            }.bind(this));
+        }.bind(this));
+
         this.graphics.scale.set(0.5, 0.5);
         this.graphics.anchor.set(0.5, 0.5);
         this.graphics.alpha = this.config.alpha || 1;
         this.speed = config.defaultSpeed;
+        this.health = unitConfig.health;
 
         this.group = game.add.group();
         this.group.enableBody = true;
@@ -97,7 +110,19 @@ function(config, utils, music, player){
 
     Unit.prototype.onPlayerHitUnit = function(unitSprite, bullet) {
         bullet.kill();
-        this.destroy();
+        this.health -= bullet.attack;
+        this.graphics.tint = 0xEE8820;
+
+        var tweenScale = this.game.add.tween(this.graphics.scale);
+        tweenScale.to({x: "-0.15", y:"-0.15"}, 50)
+            .to({x: "+0.15", y:"+0.15"}, 75).start();
+
+        setTimeout(function(){
+            this.graphics.tint = 0xFFFFFF;
+        }.bind(this), 20);
+        if (this.health <= 0){
+            this.destroy();
+        }
     }
 
     Unit.prototype.killBullet = function(bullet) {

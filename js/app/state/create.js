@@ -24,8 +24,8 @@ function(config, background, music, player, enemies){
         // Create some temporary enemies
         //TODO remove this
         setInterval(function(){
-            new enemies.line1(game, -100, -100);
-            new enemies.line1(game, config.game.width+100, -100, true);
+            new enemies.line1(game, -50, -50);
+            new enemies.line1(game, config.game.width+50, -50, true);
         }, 1000);
 
         game.load.audio('title', 'assets/sounds/title.mp3').onFileComplete.add(

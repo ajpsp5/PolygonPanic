@@ -8,9 +8,17 @@ body {
 
 #phaser-container {
     position: absolute;
-    left: 50%;
-    margin-left: -640px;
+    left: 20px;
     background-color: #4545AA;
     border-left: 1px solid #CCCCCC;
     border-right: 1px solid #CCCCCC;
+}
+
+#game-container {
+    position: absolute;
+    left: 50%;
+    top: 0px;
+    margin-left: -640px;
+    width: 1280px;
+    height: 100%;
 }
