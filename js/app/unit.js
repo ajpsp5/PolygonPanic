@@ -5,15 +5,21 @@
 define(["app/config", "app/utils", "app/music", "app/player"],
 function(config, utils, music, player){
     var Unit = function() {}
-    Unit.prototype.init = function(game, x, y, unitConfig){
+    Unit.prototype.init = function(game, x, y, width, height, unitConfig){
         var x = x || 0;
         var y = y || 0;
 
         this.game = game;
         this.config = unitConfig;
         this.graphics = this.game.add.sprite(x, y, this.config.unitTexture);
-        this.game.physics.enable(this.graphics, Phaser.Physics.ARCADE);
-        this.graphics.checkWorldBounds = true;
+        this.graphics.anchor.set(0.5, 0.5);
+
+        this.collisionBody = game.add.sprite(0, 0, game.add.bitmapData(width, height));
+        this.collisionBody.anchor.set(0.5, 0.5);
+        this.graphics.addChild(this.collisionBody);
+        this.game.physics.enable(this.collisionBody, Phaser.Physics.ARCADE);
+        this.collisionBody.checkWorldBounds = true;
+
         this.graphics.events.onEnterBounds.add(function(){
             this.graphics.events.onOutOfBounds.add(function(){
                 // When a unit goes out of view, destroy it after
@@ -59,12 +65,12 @@ function(config, utils, music, player){
         // Remove units which are below the bottom of the screen
         this.graphics.update = function(){
             this.game.physics.arcade.overlap(player.sprite,
-                                         this.group,
-                                         this.onUnitHitPlayer.bind(this),
-                                         null, this);
+                                             this.group,
+                                             this.onUnitHitPlayer.bind(this),
+                                             null, this);
 
             this.game.physics.arcade.overlap(player.group,
-                                             this.graphics,
+                                             this.collisionBody,
                                              this.onPlayerHitUnit.bind(this),
                                              null, this);
             if (this.position.y > config.game.height){
@@ -109,7 +115,14 @@ function(config, utils, music, player){
     }
 
     Unit.prototype.onPlayerHitUnit = function(unitSprite, bullet) {
-        bullet.kill();
+        if (bullet.hasHit)
+            return;
+        bullet.hasHit = true;
+        setTimeout(function(){
+            bullet.kill();
+            bullet.hasHit = false;
+        }, 100);
+
         this.health -= bullet.attack;
         this.graphics.tint = 0xEE8820;
 
@@ -123,6 +136,7 @@ function(config, utils, music, player){
         if (this.health <= 0){
             this.destroy();
         }
+
     }
 
     Unit.prototype.killBullet = function(bullet) {
@@ -130,7 +144,7 @@ function(config, utils, music, player){
     }
 
     Unit.prototype.attack = function() {
-        if (!this.graphics.exists) {
+        if (!this.graphics.exists || !this.config.attackPattern) {
             this.bulletTimer.stop();
             return;
         } else if (!this.graphics.inCamera) {

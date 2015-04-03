@@ -3,8 +3,8 @@
  * phase of Phaser js startup
  * @module app/state/create
  */
-define(["app/config", "app/background", "app/music", "app/player", "app/enemies"],
-function(config, background, music, player, enemies){
+define(["app/config", "app/background", "app/music", "app/player", "app/level/1"],
+function(config, background, music, player, level1){
     "use strict"
 
     /**
@@ -21,12 +21,8 @@ function(config, background, music, player, enemies){
         background.start(game);
         player.init(game, config.game.width/2, config.game.height-40);
 
-        // Create some temporary enemies
-        //TODO remove this
-        setInterval(function(){
-            new enemies.line1(game, -50, -50);
-            new enemies.line1(game, config.game.width+50, -50, true);
-        }, 1000);
+        level1.init(game);
+        level1.start();
 
         game.load.audio('title', 'assets/sounds/title.mp3').onFileComplete.add(
             function(percent, name) {
