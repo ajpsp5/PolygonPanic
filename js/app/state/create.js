@@ -3,8 +3,9 @@
  * phase of Phaser js startup
  * @module app/state/create
  */
-define(["app/config", "app/background", "app/music", "app/player", "app/level/1"],
-function(config, background, music, player, level1){
+define(["app/config", "app/background", "app/music", "app/player",
+        "app/levels", "app/poweruplist"],
+function(config, background, music, player, levels, poweruplist){
     "use strict"
 
     /**
@@ -17,22 +18,37 @@ function(config, background, music, player, level1){
         // Enable physics for collison
         game.physics.startSystem(Phaser.Physics.ARCADE);
 
-        music.start(game);
-        background.start(game);
-        player.init(game, config.game.width/2, config.game.height-40);
+        // Disable pause on loss of focus
+        game.stage.disableVisibilityChange = true;
 
-        level1.init(game);
-        level1.start();
-
-        game.load.audio('title', 'assets/sounds/title.mp3').onFileComplete.add(
-            function(percent, name) {
-                if (name == 'title') {
-                    music.play('title');
-                    music.loadBackgroundMusic();
-                }
+        requirejs(["shakescreen"], function(Shake){
+            game.plugins.screenShake = game.plugins.add(Phaser.Plugin.ScreenShake);
         });
 
-        game.load.start();
+        music.start(game, 'title');
+        background.start(game);
+        
+
+        $(document).ready(function() {
+            $("#playBtn").click(function() {
+                $("#mainMenu_Container").animate({
+                    height: '-=200px',
+                    marginLeft: "13.55%",
+                    width: '-=49%'
+               }, 1000);
+               
+                $("#mainMenu_Container").animate({
+                    opacity: 0
+                }, 1000);
+                //$("#mainMenu_Container").center(true);
+                
+                
+        	player.init(game, config.game.width/2, config.game.height-40);
+
+        	levels.init(game);
+        	levels.start();
+            });
+        });
     };
     return create;
 });

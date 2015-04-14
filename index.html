@@ -3,17 +3,102 @@
   <head>
     <meta charset="utf-8" />
     <title>Polygon Panic</title>
+    
+    <link rel="stylesheet" href="css/hover-min.css">
 
+    <!-- Latest compiled and minified CSS -->
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.4/css/bootstrap.min.css">
+
+    <!-- Optional theme -->
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.4/css/bootstrap-theme.min.css">
+
+    <!-- Latest compiled and minified JavaScript -->
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.4/js/bootstrap.min.js"></script>
+
+    <script src="js/lib/jquery.js"></script>
+    
     <link rel="stylesheet" type="text/css" href="css/bootstrap.min.css">
     <link rel="stylesheet" type="text/css" href="css/style.css">
 
+    
+    
+    <script>
+        jQuery.fn.center = function() {
+            this.css("position", "absolute");
+            //this.css("top", Math.max(0, (($(window).height() - $(this).outerHeight()) / 2) + 
+            //$(window).scrollTop()) + "px");
+            this.css("left", Math.max(0, (($(window).width() - $(this).outerWidth()) / 2) +
+                $(window).scrollLeft()) + "px");
+            this.css("right", Math.max(0, (($(window).width() - $(this).outerWidth()) / 2) +
+                $(window).scrollRight()) + "px");
+
+            return this;
+        }
+
+
+
+        
+    </script>
+    
+    
+    
+    
     <script data-main="app" src="js/lib/require.js"></script>
+    
+    
+    
   </head>
   <body>
+  
+  <div align="center" id="mainMenu_Container" class="menuContainer jumbotron">
+        <div id="gameHeader" class="jumbotron">
+            <h1 class="header">PolygonPanic </h1>
+            <p class="subText">Can you survive the madness?</p>
+        </div>
+        <a href="#" id="playBtn" class="push_button red">Play</a>
+        <a  class="push_button blue">How to Play?</a>
+    </div>
+
+    <div align="center" id="howToPlay" class="tutorialContainer jumbotron" style="display: none;">
+        <h1 class="header" style='margin-top: 5%;'> How To Play</h1>
+        <br/>
+
+        <table align='center' style='border-style: solid;'>
+            <tr style='height: 150px;'>
+                <td style='width: 300px; border-style: solid;'></td>
+                <td style='width: 300px; border-style: solid;'></td>
+            </tr>
+        </table>
+
+        <br/>
+        <a onclick="$('#howToPlay').hide(); $('#mainMenu_Container').show(1000);" class="push_button blue">Back to Menu</a>
+    </div>
+  
+  
+    <div id="level-transition">
+      <div class="container row">
+        <h1>Level Complete</h1>
+        <table class="table">
+            <tr><th>Statistic</th><th>Value</th></tr>
+            <tr><td>Total Score</td><td id="total-score"></td></tr>
+            <tr><td>Enemies Destroyed</td><td id="enemies-destroyed"></td></tr>
+            <tr><td>Time Played</td><td id="time-played"></td></tr>
+        </table>
+        <button class="btn btn-primary col-sm-4 col-sm-offset-4">Next</button>
+      </div>
+    </div>
+    <div id="game-over">
+      <div class="container row">
+        <h1>Game Over</h1>
+      </div>
+    </div>
     <div id="game-container">
       <div id="phaser-container">
         <div id="phaser-body"></div>
       </div>
     </div>
+    
+    
+    
   </body>
 </html>
