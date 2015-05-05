@@ -60,15 +60,16 @@
     </div>
 
     <div align="center" id="howToPlay" class="tutorialContainer jumbotron" style="display: none;">
-        <h1 class="header" style='margin-top: 5%;'> How To Play</h1>
+        <h1 class="header" style='margin-top: 1%;'> How To Play</h1>
+	<h3>Click To Toggle Menus</h3>
         <br/>
-
-        <table align='center' style='border-style: solid;'>
-            <tr style='height: 150px;'>
-                <td style='width: 300px; border-style: solid;'></td>
-                <td style='width: 300px; border-style: solid;'></td>
-            </tr>
-        </table>
+		
+        	<div id="image1">
+			<img src="../assets/images/howToPlay2.jpg" width="70%" height="auto" onclick="$('#image1').hide(); $('#image2').show(600);">
+		</div>
+		<div id="image2">
+			<img src="../assets/images/howToPlay1.jpg" width="70%" height="auto" onclick="$('#image2').hide(); $('#image1').show(600);">
+		</div>
 
         <br/>
         <a onclick="$('#howToPlay').hide(); $('#mainMenu_Container').show(1000);" class="push_button blue">Back to Menu</a>
